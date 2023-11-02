@@ -1,2 +1,2 @@
-# cleaned-Webvid
-use strategy to achieve clean webvid-10m
+## Cleaned-Webvid
+use strategy to achieve cleaned webvid-10m dataset for video generation modeling. 
