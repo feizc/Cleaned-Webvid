@@ -24,15 +24,7 @@ def video_black_find(video_path, total_num):
                 image.save(str(total_num) + '.jpg') 
                 total_num += 1 
         break 
-
-
-def opencv_inpainting(image_path, mask_path): 
-    image = cv2.imread(image_path)
-    mask = cv2.imread(mask_path)
-    
-    dst = cv2.inpaint(image, mask, 3, cv2.INPAINT_TELEA) # cv2.INPAINT_NS
-    cv2.imshow('dst', dst)
-
+    return total_num
 
 
 def search_pattern(csv_path, folder, total_num): 
@@ -45,12 +37,24 @@ def search_pattern(csv_path, folder, total_num):
         video_dir = os.path.join(video_dir, page_dir)
         video_dir    = os.path.join(video_dir, f"{videoid}.mp4")
         if os.path.exists(video_dir): 
-            video_black_find(video_dir, total_num) 
+            total_num = video_black_find(video_dir, total_num) 
         if total_num > 100:
             break 
+
+
+import numpy as np 
+def image_binary(image_path): 
+    image = cv2.imread(image_path, 0) 
+    ret, thresh = cv2.threshold(image, 10, 255, cv2.THRESH_BINARY) 
+    kernel = np.ones((5, 5), dtype=np.uint8)
+    dilate = cv2.dilate(thresh, kernel, 5)
+    cv2.imwrite('black_binary.jpg', dilate)
+
 
 
 csv_path = 'results_10M_train.csv'
 folder = 'webvid'
 total_num = 1 
-search_pattern(csv_path, folder, total_num) 
+black_image_path = 'black.jpg'
+image_binary(black_image_path)
+# search_pattern(csv_path, folder, total_num) 
